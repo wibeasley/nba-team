@@ -19,11 +19,17 @@ requireNamespace("testit") #For asserting conditions meet expected patterns.
 
 # ---- declare-globals ---------------------------------------------------------
 # Constant values that won't change.
+path_in_team                   <- "data-phi-free/raw/team.csv"
 path_in                        <- "data-phi-free/raw/team-shooting.csv"
 path_out                       <- "data-phi-free/derived/team-shooting.rds"
 figure_path <- 'stitched-output/manipulation/te/'
 
-col_types <- readr::cols_only(
+col_types_team <- readr::cols_only(
+  team_id      = readr::col_integer(),
+  team_name    = readr::col_character(),
+  city         = readr::col_character()
+)
+col_types_shooting <- readr::cols_only(
   `TEAM`              = readr::col_character(),
   `GP`                = readr::col_integer(),
   `G`                 = readr::col_integer(),
@@ -46,8 +52,10 @@ col_types <- readr::cols_only(
 
 # ---- load-data ---------------------------------------------------------------
 # Read the CSVs
-ds      <- readr::read_csv(path_in, col_types=col_types)
+ds_team <- readr::read_csv(path_in_team, col_types=col_types_team)
+ds      <- readr::read_csv(path_in     , col_types=col_types_shooting)
 
+ds_team
 ds
 
 # ---- tweak-data --------------------------------------------------------------
@@ -91,16 +99,11 @@ ds <- ds %>%
 
 
 # ---- team-id ----------------------------------------------------------
-ds <- ds %>%
-  dplyr::left_join(
-    ds %>%
-      dplyr::distinct(team_name, .keep_all = FALSE) %>%
-      dplyr::arrange(team_name) %>%
-      dplyr::mutate(
-        team_id = seq_len(n())
-      ),
-     by = "team_name"
+ds <- ds_team %>%
+  dplyr::mutate(
+    team_label   = sprintf("%s (% 2i)", city, team_id)
   ) %>%
+  dplyr::right_join(ds, by="team_name") %>%
   dplyr::arrange(defender_distance, team_id)
 
 
@@ -119,7 +122,7 @@ testit::assert("The defender_distance-team_id combination should be unique.", al
 # ---- specify-columns-to-upload -----------------------------------------------
 dput(colnames(ds)) # Print colnames for line below.
 columns_to_write <- c(
-  "defender_distance", "team_id", "team_name", "game_count",
+  "defender_distance", "team_id", "team_name", "team_label", "game_count",
   "fg_proportion" , "fg_made" , "fg_attempted" , "fg_percentage" , "fg_effective_percentage",
   "fg2_proportion", "fg2_made", "fg2_attempted", "fg2_percentage",
   "fg3_proportion", "fg3_made", "fg3_attempted", "fg3_percentage"

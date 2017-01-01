@@ -57,7 +57,7 @@ TabularManifest::histogram_continuous(ds, variable_name="fg3_percentage")
 # }
 
 # ---- scatterplots ------------------------------------------------------------
-g1 <- ggplot(ds, aes(x=defender_distance, y=fg3_proportion, label=team_id, color=team_name, group=team_name)) +
+g1 <- ggplot(ds, aes(x=defender_distance, y=fg3_proportion, label=team_id, color=team_label, group=team_label)) +
   geom_line() +
   geom_text() +
   # geom_point(shape=1) +

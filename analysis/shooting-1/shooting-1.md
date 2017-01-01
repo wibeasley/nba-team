@@ -51,7 +51,7 @@ This report covers the analyses used in the ZZZ project (Marcus Mark, PI).
 For the sake of documentation and reproducibility, the current report was rendered on a system using the following software.
 
 ```
-Report rendered by wibeasley at 2017-01-01, 14:44 -0600 in 11 seconds.
+Report rendered by wibeasley at 2017-01-01, 14:58 -0600 in 10 seconds.
 ```
 
 ```
