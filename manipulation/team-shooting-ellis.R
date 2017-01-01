@@ -20,23 +20,23 @@ requireNamespace("testit") #For asserting conditions meet expected patterns.
 # ---- declare-globals ---------------------------------------------------------
 # Constant values that won't change.
 path_in                        <- "data-phi-free/raw/team-shooting.csv"
-path_out                       <- "data-phi-free/derived/team-shooting.csv"
+path_out                       <- "data-phi-free/derived/team-shooting.rds"
 figure_path <- 'stitched-output/manipulation/te/'
 
 col_types <- readr::cols_only(
   `TEAM`              = readr::col_character(),
   `GP`                = readr::col_integer(),
   `G`                 = readr::col_integer(),
-  `FREQ`              = readr::col_numeric(),
+  `FREQ`              = readr::col_number(),
   `FGM`               = readr::col_double(),
   `FGA`               = readr::col_double(),
   `FG%`               = readr::col_double(),
   `EFG%`              = readr::col_double(),
-  `2FG FREQ`          = readr::col_numeric(),
+  `2FG FREQ`          = readr::col_number(),
   `2FGM`              = readr::col_double(),
   `2FGA`              = readr::col_double(),
   `2FG%`              = readr::col_double(),
-  `3FG FREQ`          = readr::col_numeric(),
+  `3FG FREQ`          = readr::col_number(),
   `3PM`               = readr::col_double(),
   `3PA`               = readr::col_double(),
   `3P%`               = readr::col_double(),
@@ -131,7 +131,7 @@ ds_slim
 
 
 # ---- save-to-disk ------------------------------------------------------------
-readr::write_csv(ds, path_out)
+readr::write_rds(ds_slim, path_out)
 
 #Possibly consider writing to sqlite (with RSQLite) if there's no PHI, or a central database if there is PHI.
 
